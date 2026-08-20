@@ -7,10 +7,16 @@ kafka-topics:
 
 spring:
   kafka:
-    bootstrap-servers: localhost:9092
-    producer:
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.example.kafka.config.StockPriceSerializer
+    producers:
+      stock-prices:
+        bootstrap-servers: localhost:9092
+        key-serializer: org.apache.kafka.common.serialization.StringSerializer
+        value-serializer: org.example.kafka.config.StockPriceSerializer
+      stock-signals:
+        bootstrap-servers: localhost:9092
+        key-serializer: org.apache.kafka.common.serialization.StringSerializer
+        value-serializer: org.example.kafka.config.StockSignalSerializer
+
 
   application:
     name: kafka

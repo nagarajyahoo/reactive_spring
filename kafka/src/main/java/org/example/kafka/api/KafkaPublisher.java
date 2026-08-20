@@ -6,6 +6,7 @@ import org.example.beans.StockPrice;
 import org.example.beans.StockPriceUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.*;
@@ -23,8 +24,8 @@ public class KafkaPublisher {
 
     public KafkaPublisher(@Value("${kafka-topics.stock-prices}") String stockPricesTopic,
                           @Value("${kafka-topics.stock-signals}") String stockSignalsTopic,
-                          KafkaTemplate<String, StockPrice> priceProducer,
-                          KafkaTemplate<String, StockSignal> signalProducer) {
+                          @Qualifier("stockPricesKafkaTemplate") KafkaTemplate<String, StockPrice> priceProducer,
+                          @Qualifier("stockSignalsKafkaTemplate") KafkaTemplate<String, StockSignal> signalProducer) {
         this.stockPricesTopic = stockPricesTopic;
         this.stockSignalsTopic = stockSignalsTopic;
         this.priceProducer = priceProducer;
