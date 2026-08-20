@@ -11,4 +11,9 @@ public class KafkaConfig {
     public NewTopic invalidStockPricesTopic(@Value("${kafka-topics.invalid-stock-prices}") String topicName) {
         return new NewTopic(topicName, 3, (short)1);
     }
+
+    @Bean
+    public NewTopic invalidStockSignalsTopic(@Value("${kafka-topics.invalid-stock-signals}") String topicName) {
+        return new NewTopic(topicName, 3, (short)1);
+    }
 }

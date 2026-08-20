@@ -1,6 +1,7 @@
 package org.example.kafka.config;
 
 import org.apache.kafka.clients.admin.NewTopic;
+import org.apache.kafka.clients.producer.ProducerConfig;
 import org.example.beans.StockPrice;
 import org.example.beans.StockSignal;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -37,8 +38,8 @@ public class KafkaConfig {
     @Bean
     @Qualifier("stockPricesProducerFactory")
     public ProducerFactory<String, StockPrice> stockPricesProducerFactory(
-            @Qualifier("stockPricesProducerProperties") Map<String, Object> properties) {
-        return new DefaultKafkaProducerFactory<>(properties);
+            @Qualifier("stockPricesProducerProperties") Map<String, Object> props) {
+        return new DefaultKafkaProducerFactory<>(kafkaProperties(props));
     }
 
     @Bean
@@ -59,8 +60,20 @@ public class KafkaConfig {
     @Bean
     @Qualifier("stockSignalsProducerFactory")
     public ProducerFactory<String, StockSignal> stockSignalsProducerFactory(
-            @Qualifier("stockSignalsProducerProperties") Map<String, Object> properties) {
-        return new DefaultKafkaProducerFactory<>(properties);
+            @Qualifier("stockSignalsProducerProperties") Map<String, Object> props) {
+        return new DefaultKafkaProducerFactory<>(kafkaProperties(props));
+    }
+
+    private Map<String, Object> kafkaProperties(Map<String, Object> props) {
+        Map<String, Object> config = new HashMap<>();
+
+        config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,
+                props.get("bootstrap-servers"));
+        config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,
+                props.get("key-serializer"));
+        config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
+                props.get("value-serializer"));
+        return config;
     }
 
     @Bean

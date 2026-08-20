@@ -2,6 +2,7 @@ package org.example.api.rest;
 
 import org.example.api.service.HelloService;
 import org.example.beans.StockPrice;
+import org.example.beans.StockSignal;
 import org.springframework.messaging.rsocket.RSocketRequester;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -49,6 +50,17 @@ public class HelloController {
                         req -> req.route("stock.prices.stream")
                                 .data(symbol)
                                 .retrieveFlux(StockPrice.class)
+                                .map(objectMapper::writeValueAsString)
+                );
+    }
+
+    @GetMapping("/signalsStream/{symbol}")
+    public Flux<String> signalStream(@PathVariable("symbol") String symbol) {
+        return requester
+                .flatMapMany(
+                        req -> req.route("stock.signals.stream")
+                                .data(symbol)
+                                .retrieveFlux(StockSignal.class)
                                 .map(objectMapper::writeValueAsString)
                 );
     }
