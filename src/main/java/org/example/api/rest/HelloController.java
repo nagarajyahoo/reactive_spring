@@ -37,31 +37,43 @@ public class HelloController {
         return share;
     }
 
-    @GetMapping("/prices")
-    public Flux<String> getCount() {
+    @GetMapping("/prices/{count}")
+    public Flux<StockPrice> priceStream(@PathVariable("count") int count) {
         return requester
-                .flatMapMany(req -> req.route("stock.prices").retrieveFlux(String.class));
+                .flatMapMany(
+                        req -> req.route("stock.prices")
+                                .data(count)
+                                .retrieveFlux(StockPrice.class)
+                );
+    }
+
+    @GetMapping("/signals/{count}")
+    public Flux<StockSignal> signalStream(@PathVariable("count") int count) {
+        return requester
+                .flatMapMany(
+                        req -> req.route("stock.signals")
+                                .data(count)
+                                .retrieveFlux(StockSignal.class)
+                );
     }
 
     @GetMapping("/priceStream/{symbol}")
-    public Flux<String> priceStream(@PathVariable("symbol") String symbol) {
+    public Flux<StockPrice> priceStream(@PathVariable("symbol") String symbol) {
         return requester
                 .flatMapMany(
                         req -> req.route("stock.prices.stream")
                                 .data(symbol)
                                 .retrieveFlux(StockPrice.class)
-                                .map(objectMapper::writeValueAsString)
                 );
     }
 
     @GetMapping("/signalsStream/{symbol}")
-    public Flux<String> signalStream(@PathVariable("symbol") String symbol) {
+    public Flux<StockSignal> signalStream(@PathVariable("symbol") String symbol) {
         return requester
                 .flatMapMany(
                         req -> req.route("stock.signals.stream")
                                 .data(symbol)
                                 .retrieveFlux(StockSignal.class)
-                                .map(objectMapper::writeValueAsString)
                 );
     }
 }

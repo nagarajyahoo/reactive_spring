@@ -1,6 +1,7 @@
 package org.example.api.service;
 
 import org.example.beans.StockPrice;
+import org.example.beans.StockPriceUtil;
 import org.example.beans.StockSignal;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -19,16 +20,12 @@ public class HelloService {
         this.stockSignalsService = stockSignalsService;
     }
 
-    public List<String> getPrices(){
-        List<String> list = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            list.add("price-" + i);
-        }
-        return list;
+    public Flux<StockPrice> priceStream(int count) {
+        return Flux.fromIterable(StockPriceUtil.stockPrices(count));
     }
 
-    public Flux<StockPrice> priceStream() {
-        return priceStreamService.stream();
+    public Flux<StockSignal> signalStream(int count) {
+        return Flux.fromIterable(StockPriceUtil.stockSignals(count));
     }
 
     public Flux<StockPrice> priceStream(String symbol) {

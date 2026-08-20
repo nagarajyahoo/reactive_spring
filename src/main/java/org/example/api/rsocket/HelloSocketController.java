@@ -26,8 +26,15 @@ public class HelloSocketController {
     }
 
     @MessageMapping("stock.prices")
-    public Flux<String> prices() {
-        return Flux.fromIterable(helloService.getPrices())
+    public Flux<StockPrice> priceStream(int count) {
+        return helloService.priceStream(count)
+                .delayElements(Duration.ofSeconds(1))
+                .log();
+    }
+
+    @MessageMapping("stock.signals")
+    public Flux<StockSignal> signalStream(int count) {
+        return helloService.signalStream(count)
                 .delayElements(Duration.ofSeconds(1))
                 .log();
     }
