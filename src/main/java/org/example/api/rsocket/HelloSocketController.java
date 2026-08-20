@@ -26,15 +26,15 @@ public class HelloSocketController {
     }
 
     @MessageMapping("stock.prices")
-    public Flux<StockPrice> priceStream(int count) {
-        return helloService.priceStream(count)
+    public Flux<StockPrice> priceStream(StreamCountReq req) {
+        return helloService.priceStream(req.count())
                 .delayElements(Duration.ofSeconds(1))
                 .log();
     }
 
     @MessageMapping("stock.signals")
-    public Flux<StockSignal> signalStream(int count) {
-        return helloService.signalStream(count)
+    public Flux<StockSignal> signalStream(StreamCountReq req) {
+        return helloService.signalStream(req.count())
                 .delayElements(Duration.ofSeconds(1))
                 .log();
     }

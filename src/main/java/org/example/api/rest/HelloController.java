@@ -1,5 +1,6 @@
 package org.example.api.rest;
 
+import org.example.api.rsocket.StreamCountReq;
 import org.example.api.service.HelloService;
 import org.example.beans.StockPrice;
 import org.example.beans.StockSignal;
@@ -42,7 +43,7 @@ public class HelloController {
         return requester
                 .flatMapMany(
                         req -> req.route("stock.prices")
-                                .data(count)
+                                .data(new StreamCountReq(count))
                                 .retrieveFlux(StockPrice.class)
                 );
     }
@@ -52,7 +53,7 @@ public class HelloController {
         return requester
                 .flatMapMany(
                         req -> req.route("stock.signals")
-                                .data(count)
+                                .data(new StreamCountReq(count))
                                 .retrieveFlux(StockSignal.class)
                 );
     }
