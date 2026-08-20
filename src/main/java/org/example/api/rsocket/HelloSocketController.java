@@ -37,4 +37,11 @@ public class HelloSocketController {
                 .delayElements(Duration.ofSeconds(1))
                 .log();
     }
+
+    @MessageMapping("stock.signals.stream")
+    public Flux<StockPrice> pricesSignals(String symbol) {
+        return helloService.signalStream(symbol)
+                .delayElements(Duration.ofSeconds(1))
+                .log();
+    }
 }

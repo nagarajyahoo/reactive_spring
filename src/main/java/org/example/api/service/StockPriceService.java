@@ -6,11 +6,11 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Sinks;
 
 @Service
-public class StockPriceStreamService {
+public class StockPriceService {
     private final Sinks.Many<StockPrice> sink =
             Sinks.many()
                     .multicast()
-                    .onBackpressureBuffer();
+                    .directBestEffort();
 
     public void publish(StockPrice update) {
         sink.tryEmitNext(update);

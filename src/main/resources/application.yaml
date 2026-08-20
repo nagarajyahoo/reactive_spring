@@ -3,7 +3,9 @@ server:
 
 kafka-topics:
   stock-prices: "stock.prices"
+  stock-signals: "stock.signals"
   invalid-stock-prices: "invalid.stock.prices"
+  invalid-stock-signals: "invalid.stock.signals"
 
 spring:
   application:

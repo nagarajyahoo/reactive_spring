@@ -1,26 +1,22 @@
 package org.example.api.service;
 
-import jakarta.annotation.PostConstruct;
-import org.apache.kafka.common.serialization.Serdes;
-import org.apache.kafka.streams.StreamsBuilder;
-import org.apache.kafka.streams.kstream.Consumed;
-import org.apache.kafka.streams.kstream.KStream;
 import org.example.beans.StockPrice;
-import org.example.config.StockPriceSerde;
-import org.springframework.beans.factory.annotation.Value;
+import org.example.beans.StockSignal;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class HelloService {
-    private final StockPriceStreamService priceStreamService;
+    private final StockPriceService priceStreamService;
+    private final StockSignalsService stockSignalsService;
 
-    public HelloService(StockPriceStreamService priceStreamService) {
+    public HelloService(StockPriceService priceStreamService,
+                        StockSignalsService stockSignalsService) {
         this.priceStreamService = priceStreamService;
+        this.stockSignalsService = stockSignalsService;
     }
 
     public List<String> getPrices(){
@@ -37,5 +33,9 @@ public class HelloService {
 
     public Flux<StockPrice> priceStream(String symbol) {
         return priceStreamService.stream(symbol);
+    }
+
+    public Flux<StockSignal> signalStream(String symbol) {
+        return stockSignalsService.stream(symbol);
     }
 }
