@@ -2,6 +2,7 @@ package org.example.api.rsocket;
 
 import org.example.api.service.HelloService;
 import org.example.beans.StockPrice;
+import org.example.beans.StockSignal;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
 import reactor.core.publisher.Flux;
@@ -39,7 +40,7 @@ public class HelloSocketController {
     }
 
     @MessageMapping("stock.signals.stream")
-    public Flux<StockPrice> pricesSignals(String symbol) {
+    public Flux<StockSignal> pricesSignals(String symbol) {
         return helloService.signalStream(symbol)
                 .delayElements(Duration.ofSeconds(1))
                 .log();
