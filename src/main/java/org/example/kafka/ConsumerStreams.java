@@ -10,6 +10,8 @@ import org.example.beans.StockPrice;
 import org.example.beans.StockSignal;
 import org.example.config.StockPriceSerde;
 import org.example.config.StockSignalSerde;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,6 +22,7 @@ import java.util.Set;
 @Configuration
 @EnableKafkaStreams
 public class ConsumerStreams {
+    private static final Logger log = LoggerFactory.getLogger(ConsumerStreams.class);
     // create a bean
     // read from a topic
     // process the data --> for e.g., filter
@@ -42,7 +45,7 @@ public class ConsumerStreams {
                 .stream(stockPricesTopic, Consumed.with(Serdes.String(), new StockPriceSerde()));
 
         stream.filter((k, v) -> {
-                    System.out.println(v);
+                    log.info("[stock_price]: Received {}", v);
                     priceStreamService.publish(v);
                     return v.price() <= 0.0;
                 })
@@ -59,9 +62,9 @@ public class ConsumerStreams {
                 .stream(stockSignalsTopic, Consumed.with(Serdes.String(), new StockSignalSerde()));
 
         stream.filter((k, v) -> {
-                    System.out.println(v);
+                    log.info("[stock_signal]: Received {}", v);
                     signalService.publish(v);
-                    return v.signal() == null || valid_signals.contains(v.signal().toUpperCase());
+                    return v.signal() == null || !valid_signals.contains(v.signal().toUpperCase());
                 })
                 .to(invalidSignalsTopic);
 
