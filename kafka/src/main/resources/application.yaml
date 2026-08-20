@@ -2,7 +2,8 @@ server:
   port: 8081
 
 kafka-topics:
-  stock_prices: "stock.prices"
+  stock-prices: "stock.prices"
+  stock-signals: "stock.signals"
 
 spring:
   kafka:
